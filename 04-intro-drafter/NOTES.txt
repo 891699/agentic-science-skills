@@ -1,0 +1,2 @@
+skill: intro-drafter
+source project: 04-intro-drafter
