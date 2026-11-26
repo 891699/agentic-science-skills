@@ -5,6 +5,13 @@ description: "Turn a scientific paper into a structured, quote-anchored note: a 
 
 # Paper Note
 
+## Requirements
+
+- Python 3.10 or newer.
+- PyMuPDF for PDF access: `pip install pymupdf==2.0` (the Docker image pins the same version).
+- No other dependencies; the run needs no network access.
+
+
 A summary is cheap; a summary you can audit is not. This skill produces a note in
 which the paper's own structure is preserved, every claim is bound to a sentence
 that really exists in the PDF, and a verifier re-checks that binding before the
@@ -113,5 +120,32 @@ requires each to be caught.
 - Section boundaries come from the PDF's typography; a paper with unusual
   headings may need one manual correction in `segments.json`.
 - Table-only results are not quoted unless a caption sentence carries them.
+
+## When to use
+
+Use it when notes must survive checking: every quoted sentence is verified verbatim against
+the paper, and a note without a quote is flagged.
+
+- **Input**: one PDF; notes are written into `work/notes.json`.
+- **Output**: structured notes (claim, quote, anchor, section) and a verification report.
+- **Do not use** it to write free-form summaries; a note without an anchor is a defect here.
+
+## Minimal example
+
+Input: a 4-page paper at `input/paper.pdf`.
+
+```bash
+python scripts/prepare.py input/paper.pdf --out work --max-sentences 8
+python scripts/verify_notes.py --work work
+```
+
+示意输出（示例，非正式答案）:
+
+```json
+{"claims": 8, "quotes_verified": 8, "anchors": 8, "sections_covered": 5,
+ "status": "success"}
+```
+
+Illustrative only.
 
 See `references/` for the workflow, the note schema and the QA rules.
