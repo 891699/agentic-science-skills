@@ -5,6 +5,13 @@ description: "Build an evidence-bound knowledge graph from a paper: typed entiti
 
 # Paper KG
 
+## Requirements
+
+- Python 3.10 or newer.
+- PyMuPDF for PDF access: `pip install pymupdf==2.0` (the Docker image pins the same version).
+- No other dependencies; the run needs no network access.
+
+
 A graph without provenance is a diagram. This skill builds a graph in which every
 node and every edge carries the sentence it came from, aliases are merged on a
 recorded basis, and the result answers queries and exports to tools other people
@@ -127,5 +134,33 @@ The shipped queries (`queries.cypher`, mirrored in the validator) answer:
 - The graph is per paper; cross-paper alignment is the next step, not this run.
 - Alias merging is label-based plus what the author declares; it cannot resolve a
   genuine homonym without a disambiguating attribute.
+
+## When to use
+
+Use it when the paper's entities and relations must be queryable: every node and edge carries
+the sentence it came from, and aliases are merged on evidence rather than on similarity.
+
+- **Input**: one PDF.
+- **Output**: `graph.json`, `graph.graphml`, `queries.cypher` and a validation report.
+- **Do not use** it to infer relations the paper never states; an ungrounded edge fails.
+
+## Minimal example
+
+Input: a 5-page paper at `input/paper.pdf`.
+
+```bash
+python scripts/prepare.py input/paper.pdf --out work --max-sentences 8
+python scripts/build_graph.py --work work
+python scripts/validate_graph.py --work work
+```
+
+示意输出（示例，非正式答案）:
+
+```json
+{"nodes": 24, "edges": 19, "dangling_edges": 0, "schema_ok": true,
+ "aliases_merged": 2, "status": "success"}
+```
+
+Illustrative only.
 
 See `references/` for the workflow, the schema and the QA rules.
