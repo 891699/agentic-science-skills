@@ -5,6 +5,13 @@ description: "Write a methods and experiments section from a paper's own numbers
 
 # Method Writer
 
+## Requirements
+
+- Python 3.10 or newer.
+- PyMuPDF for PDF access: `pip install pymupdf==2.0` (the Docker image pins the same version).
+- No other dependencies; the run needs no network access.
+
+
 The failure this skill prevents is a smooth methods paragraph whose numbers came
 from nowhere: a learning rate rounded from memory, a batch size that drifted, a
 "large batch" standing in for 256. Here the numbers are extracted first, the section
@@ -114,5 +121,34 @@ to be caught.
   different notation (`0.0001` vs `1e-4`) must be written the way the paper writes it.
 - Table-only numbers need `tables.json`; a number that exists only in a figure is
   not verifiable and is excluded.
+
+## When to use
+
+Use it when a methods section must be reproducible: parameters go into a spec with their
+source sentence first, the prose is written against that spec, and missing values are
+declared as gaps instead of guessed.
+
+- **Input**: one PDF.
+- **Output**: `method.md`, `spec.json`, `mapping.json`, a checklist and a gap list.
+- **Do not use** it to fill a value the paper does not state; that slot stays `unavailable`.
+
+## Minimal example
+
+Input: a 16-page paper at `input/paper.pdf`.
+
+```bash
+python scripts/prepare.py input/paper.pdf --out work --max-facts 420
+python scripts/verify_method.py --work work
+python scripts/verify_method.py --work work --selftest
+```
+
+示意输出（示例，非正式答案）:
+
+```json
+{"status": "success", "sentences": 23, "slots": 30, "unavailable": 3,
+ "hard_failures": 0}
+```
+
+Illustrative only.
 
 See `references/` for the spec contract and the QA rules.
