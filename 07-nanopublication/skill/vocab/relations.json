@@ -1,0 +1,66 @@
+{
+  "version": "1.0",
+  "note": "Controlled relation vocabulary for claim-level nanopublications. Each relation is directional: subject -> object. An assertion uses exactly one.",
+  "relations": {
+    "reports-score": {
+      "definition": "the subject achieves the stated score on the named benchmark or task",
+      "domain": "method",
+      "range": "score",
+      "example": "BERT reports-score 80.5 GLUE"
+    },
+    "outperforms": {
+      "definition": "the subject's measured result is better than the object's on the same benchmark",
+      "domain": "method",
+      "range": "method",
+      "example": "BERT outperforms GPT on GLUE"
+    },
+    "uses-method": {
+      "definition": "the subject's approach contains or applies the object as a component",
+      "domain": "method",
+      "range": "method",
+      "example": "BERT uses-method masked language modelling"
+    },
+    "trained-on": {
+      "definition": "the subject's parameters are learned from the object as training data",
+      "domain": "method",
+      "range": "data",
+      "example": "BERT trained-on BooksCorpus"
+    },
+    "requires-condition": {
+      "definition": "the claim holds only when the object condition is satisfied",
+      "domain": "claim",
+      "range": "condition",
+      "example": "BERT fine-tuning requires-condition one extra output layer"
+    },
+    "has-limitation": {
+      "definition": "the object bounds the validity or scope of the subject",
+      "domain": "method",
+      "range": "limitation",
+      "example": "unidirectional LM has-limitation cannot condition on both sides"
+    },
+    "improves-on": {
+      "definition": "the subject is a modification that raises performance relative to the object",
+      "domain": "method",
+      "range": "method",
+      "example": "bidirectional self-attention improves-on left-to-right attention"
+    },
+    "compared-with": {
+      "definition": "the subject and object are evaluated under the same conditions; no direction implied",
+      "domain": "method",
+      "range": "method",
+      "example": "BERT compared-with OpenAI GPT"
+    },
+    "part-of": {
+      "definition": "the subject is a component of the object's workflow",
+      "domain": "method",
+      "range": "method",
+      "example": "next sentence prediction part-of BERT pre-training"
+    },
+    "causes": {
+      "definition": "the subject is reported as the cause of the object's observed effect",
+      "domain": "factor",
+      "range": "effect",
+      "example": "removing NSP causes lower QNLI accuracy"
+    }
+  }
+}
