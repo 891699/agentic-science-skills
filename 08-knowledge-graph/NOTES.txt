@@ -1,0 +1,2 @@
+skill: paper-kg
+source project: 08-knowledge-graph
