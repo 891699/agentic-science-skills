@@ -1,0 +1,2 @@
+skill: paper-translator
+source project: 06-paper-translator
