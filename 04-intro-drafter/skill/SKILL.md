@@ -5,6 +5,13 @@ description: "Draft a paper's introduction and related work with a sentence-leve
 
 # Intro Drafter
 
+## Requirements
+
+- Python 3.10 or newer.
+- PyMuPDF for PDF access: `pip install pymupdf==2.0` (the Docker image pins the same version).
+- No other dependencies; the run needs no network access.
+
+
 The failure mode this skill exists for is a fluent introduction whose every
 sentence is unsourced: "recent years have seen growing interest" (whose?),
 "existing methods fail to" (which ones?), "we achieve state-of-the-art" (where?).
@@ -128,6 +135,34 @@ and a bare judgement — and requires each to be caught.
   keep them visible rather than hidden.
 - Facts are sentences of the paper; a claim that spans two sentences needs two
   fact ids, and the verifier will accept either, so cite both.
+
+## When to use
+
+Use it when an introduction and related work must be auditable: every sentence is bound to a
+fact, a citation or an explicit judgement, and the gap has to come from cited work.
+
+- **Input**: one PDF; the draft and its positional evidence map are authored together.
+- **Output**: `intro.md`, `related.md`, `claims.json`, an evidence map and a QA report.
+- **Do not use** it for marketing prose; a sentence with no basis fails the build.
+
+## Minimal example
+
+Input: a 16-page paper at `input/paper.pdf`.
+
+```bash
+python scripts/prepare.py input/paper.pdf --out work --max-facts 260
+python scripts/assemble.py --work work
+python scripts/verify_draft.py --work work
+```
+
+示意输出（示例，非正式答案）:
+
+```json
+{"status": "success", "units": 24, "groups": 3, "cited_works": 13,
+ "judgement_units": 2, "hard_failures": 0}
+```
+
+Illustrative only.
 
 See `references/` for the evidence contract, the grouping and gap rules, and the QA
 rules.
