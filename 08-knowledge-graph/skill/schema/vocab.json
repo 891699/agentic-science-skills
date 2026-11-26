@@ -1,0 +1,31 @@
+{
+  "version": "1.0",
+  "node_types": {
+    "Paper": {"description": "the source publication itself", "required": ["title"]},
+    "Method": {"description": "a technique, model or algorithm the paper names", "required": ["label"]},
+    "Task": {"description": "a benchmark or evaluation task", "required": ["label"]},
+    "Metric": {"description": "a metric or measured quantity", "required": ["label"]},
+    "Dataset": {"description": "training or evaluation data", "required": ["label"]},
+    "Condition": {"description": "a premise the claim depends on", "required": ["label"]},
+    "Limitation": {"description": "a bound on validity or scope", "required": ["label"]},
+    "Finding": {"description": "a reported result as a node so it can be queried", "required": ["label"]}
+  },
+  "edge_types": {
+    "uses": {"source": ["Method"], "target": ["Method"], "description": "the source approach contains the target"},
+    "evaluated-on": {"source": ["Method"], "target": ["Task"], "description": "the source is measured on the target task"},
+    "reports": {"source": ["Method"], "target": ["Metric"], "description": "the source reports the target metric"},
+    "compared-with": {"source": ["Method"], "target": ["Method"], "description": "evaluated under the same conditions, no direction"},
+    "improves-on": {"source": ["Method"], "target": ["Method"], "description": "the source is a modification that raises performance"},
+    "requires": {"source": ["Method"], "target": ["Condition"], "description": "the source holds only when the target holds"},
+    "limited-by": {"source": ["Method"], "target": ["Limitation"], "description": "the target bounds the source"},
+    "trained-on": {"source": ["Method"], "target": ["Dataset"], "description": "the source's parameters are learned from the target"},
+    "supports": {"source": ["Finding"], "target": ["Method"], "description": "the finding is evidence about the method"},
+    "causes": {"source": ["Method", "Finding"], "target": ["Finding"], "description": "the source is reported as the cause of the target"},
+    "from-paper": {"source": ["Method", "Task", "Metric", "Dataset", "Condition", "Limitation", "Finding"], "target": ["Paper"], "description": "provenance link to the source publication"}
+  },
+  "evidence": {
+    "required_for": ["node", "edge"],
+    "fields": ["anchor", "page", "quote"],
+    "note": "quote must occur verbatim in the parsed paper; anchor is p<page>b<block>"
+  }
+}
