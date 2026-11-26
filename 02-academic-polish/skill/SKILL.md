@@ -5,6 +5,13 @@ description: "Polish academic English without moving the science: minimal edits,
 
 # Paper Polish
 
+## Requirements
+
+- Python 3.10 or newer.
+- PyMuPDF for PDF access: `pip install pymupdf==2.0` (the Docker image pins the same version).
+- No other dependencies; the run needs no network access.
+
+
 A polish that quietly hardens a claim is a defect, not an edit. This skill pairs
 the rewrite with a change log and a verifier, so "improved" is checkable and
 "unchanged meaning" is tested rather than promised.
@@ -110,5 +117,32 @@ each to be caught.
   words), not a journal's style checker.
 - Register tuning is per paragraph; a full-journal style adaptation is a different,
   larger task.
+
+## When to use
+
+Use it when a paragraph needs academic polish without changing what it says: numbers,
+citations, hedges and terminology are held fixed while style is improved.
+
+- **Input**: one PDF (or a draft) plus a target style note.
+- **Output**: polished text, a sentence-level change log, and a fidelity report.
+- **Do not use** it to rewrite science: a change that alters a number or a claim fails.
+
+## Minimal example
+
+Input: a 2-page paper at `input/paper.pdf`.
+
+```bash
+python scripts/prepare.py input/paper.pdf --out work --max-paragraphs 6
+python scripts/verify_polish.py --work work
+```
+
+示意输出（示例，非正式答案）:
+
+```json
+{"segments": 6, "changes": 11, "numbers_preserved": true, "citations_preserved": true,
+ "length_ratio": 0.97, "status": "success"}
+```
+
+Illustrative only.
 
 See `references/` for the edit taxonomy and the QA rules.
