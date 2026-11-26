@@ -1,0 +1,2 @@
+skill: pdf-evidence-reader
+source project: 01-document-parser
