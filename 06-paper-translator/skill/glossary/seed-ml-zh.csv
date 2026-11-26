@@ -1,0 +1,60 @@
+en,zh,note
+attention,注意力,core mechanism
+self-attention,自注意力,locked form; never 自我注意力
+multi-head attention,多头注意力,
+transformer,Transformer,keep Latin form
+pre-training,预训练,
+fine-tuning,微调,
+fine-tune,微调,
+masked language model,掩码语言模型,
+next sentence prediction,下一句预测,
+embedding,嵌入,vector representation
+token,词元,subword unit
+tokenization,分词,subword segmentation
+vocabulary,词表,
+encoder,编码器,
+decoder,解码器,
+layer,层,
+hidden state,隐状态,
+parameter,参数,
+benchmark,基准,benchmark suite
+dataset,数据集,
+corpus,语料库,
+label,标签,
+classification,分类,
+regression,回归,
+accuracy,准确率,
+perplexity,困惑度,
+inference,推理,
+gradient,梯度,
+batch,批次,training batch
+learning rate,学习率,
+downstream task,下游任务,
+upstream,上游,
+transfer learning,迁移学习,
+zero-shot,零样本,
+few-shot,少样本,
+ablation study,消融实验,
+baseline,基线,
+hyperparameter,超参数,
+dropout,dropout,keep Latin form
+softmax,softmax,keep Latin form
+cross-entropy,交叉熵,
+checkpoint,检查点,
+sequence,序列,
+positional encoding,位置编码,
+multi-head,多头,
+residual connection,残差连接,
+normalisation,归一化,
+bias,偏差,avoid 偏见 unless social bias
+unsupervised,无监督,
+supervised,有监督,
+generalisation,泛化,
+state-of-the-art,当前最优,
+natural language inference,自然语言推理,
+question answering,问答,
+named entity recognition,命名实体识别,
+semantic textual similarity,语义文本相似度,
+paraphrase,复述,
+entailment,蕴含,
+mask,掩码,
