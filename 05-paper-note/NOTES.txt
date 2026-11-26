@@ -1,0 +1,2 @@
+skill: paper-note
+source project: 05-paper-note
