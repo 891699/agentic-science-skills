@@ -5,6 +5,13 @@ description: "Audit a paper's reference list against its in-text citations and e
 
 # Cite Audit
 
+## Requirements
+
+- Python 3.10 or newer.
+- PyMuPDF for PDF access: `pip install pymupdf==2.0` (the Docker image pins the same version).
+- No other dependencies; the run needs no network access.
+
+
 A bibliography can look fine and still be wrong: a citation pointing at nothing, a
 duplicate entry under two titles, a year that lost its letter. This skill compares
 the two halves of the paper — the in-text markers and the reference list — and
@@ -84,5 +91,33 @@ Merges, unresolved-but-existing citations and uncited references are reported in
 - Uncited references may be cited in a table or figure note that the parser did not
   read as prose — the finding says so explicitly.
 - No network: identifiers are validated by shape, not by resolving them.
+
+## When to use
+
+Use it when a bibliography has to reconcile with the text: every in-text marker resolves to
+an entry, split entries are merged, and the result exports to BibTeX / CSL-JSON / CSV.
+
+- **Input**: one PDF.
+- **Output**: `refs_parsed.json`, `citations_resolved.json`, `audit_report.json` and exports.
+- **Do not use** it to invent an entry for a dangling citation; that is reported as a defect.
+
+## Minimal example
+
+Input: a 6-page paper at `input/paper.pdf`.
+
+```bash
+python scripts/prepare.py input/paper.pdf --out work
+python scripts/audit.py --work work
+python scripts/audit.py --work work --selftest
+```
+
+示意输出（示例，非正式答案）:
+
+```json
+{"status": "success", "references": 54, "citations": 72, "resolved": 74,
+ "unresolved": 2, "uncited": 7, "merges": 13, "hard_failures": 0}
+```
+
+Illustrative only; the counts come from the demo paper used in this run.
 
 See `references/` for the key rules and the QA rules.
