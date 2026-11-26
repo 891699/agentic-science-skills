@@ -1,0 +1,2 @@
+skill: paper-nanopub
+source project: 07-nanopublication
