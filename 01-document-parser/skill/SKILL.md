@@ -5,6 +5,13 @@ description: "Read a scientific PDF into a verified, evidence-anchored structure
 
 # PDF Evidence Reader
 
+## Requirements
+
+- Python 3.10 or newer.
+- PyMuPDF for PDF access: `pip install pymupdf==2.0` (the Docker image pins the same version).
+- No other dependencies; the run needs no network access.
+
+
 Turn one PDF into a structure you can quote. Every sentence, heading, table and
 caption this skill emits carries a pointer back to the page and block it came
 from, so an answer built on it can be checked by a human or a grader without
@@ -30,7 +37,7 @@ to replace.
 ## What it needs
 
 - The PDF itself (the platform supplies it at `/input/`, next to `case.json` and `task.md`).
-- Python 3 with PyMuPDF (`pymupdf` / `fitz`), which the pinned runtime provides as `pdf-text-tool`.
+- Python 3 with PyMuPDF (`pymupdf` / `fitz`), installed with `pip install pymupdf==2.0`.
 - No network, no model calls, no OCR engine required for text-layer PDFs.
 
 ## Run it
@@ -130,5 +137,24 @@ Run these five checks; they are cheap and they catch almost every real error:
 - Formula sub/superscripts are captured as span flags and glyph order, not as LaTeX.
 - Merged table cells are reported through the cell grid; review borderless tables.
 - Header/footer removal keys on repeated margin text; a one-off margin note stays in the body and is flagged.
+
+
+## Minimal example
+
+Input: a 3-page paper at `input/paper.pdf`.
+
+```bash
+python scripts/pdf_evidence_parser.py input/paper.pdf --out work --render
+```
+
+示意输出（示例，非正式答案）:
+
+```json
+{"pages": 3, "sections": 7, "blocks": 46, "tables": 1, "figures": 2,
+ "references": 21, "coverage": 0.96, "out": "work/parse.json"}
+```
+
+The numbers describe this documentation example only; a real run reports what it finds,
+and a page it cannot read is listed as unreadable instead of being guessed.
 
 See `references/` for the full I/O contract, the evidence rules and a worked example.
