@@ -5,6 +5,13 @@ description: "Turn a paper's key claims into claim-level nanopublications: atomi
 
 # Paper Nanopub
 
+## Requirements
+
+- Python 3.10 or newer.
+- PyMuPDF for PDF access: `pip install pymupdf==2.0` (the Docker image pins the same version).
+- No other dependencies; the run needs no network access.
+
+
 A summary loses the link to its evidence. This skill produces the opposite: one
 nanopublication per claim, each with a single checkable assertion, the exact
 sentence that supports it, and provenance that leads back to the paper.
@@ -114,5 +121,34 @@ unknown relation) and requires each to be caught.
   with the official nanopublication library.
 - Numbers that appear only in table bodies are qualifiers with `indirect`
   evidence, not direct quotes.
+
+## When to use
+
+Use it when a claim has to become a machine-readable assertion with provenance: the output
+is a nanopublication whose assertion, provenance and publication info are each validated.
+
+- **Input**: one PDF; the claim is selected from the extracted sentences.
+- **Output**: `nanopub.trig`-style JSON-LD plus a validation report (URI, license, sources).
+- **Do not use** it for a claim the paper does not support; validation fails and that is the
+  correct outcome.
+
+## Minimal example
+
+Input: a 3-page paper at `input/paper.pdf`.
+
+```bash
+python scripts/prepare.py input/paper.pdf --out work --max-sentences 8
+python scripts/emit_nanopub.py --work work
+python scripts/validate_nanopub.py --work work
+```
+
+示意输出（示例，非正式答案）:
+
+```json
+{"assertions": 3, "provenance": 3, "publication_info": true, "valid": true,
+ "uri": "https://w3id.org/np/RA<sha256>", "issues": []}
+```
+
+Illustrative only; the digest is content-addressed and differs per run.
 
 See `references/` for the workflow, the assertion rules and the QA rules.
