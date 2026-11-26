@@ -1,0 +1,2 @@
+skill: paper-polish
+source project: 02-academic-polish
