@@ -5,6 +5,13 @@ description: "Translate a scientific paper into Chinese with a locked glossary, 
 
 # Paper Translator
 
+## Requirements
+
+- Python 3.10 or newer.
+- PyMuPDF for PDF access: `pip install pymupdf==2.0` (the Docker image pins the same version).
+- No other dependencies; the run needs no network access.
+
+
 Translate a paper so the result can still be checked against the original: one
 record per source paragraph, a glossary that is enforced rather than suggested,
 and a verifier that fails loudly when the translation stops matching the paper.
@@ -117,6 +124,25 @@ untranslated segment and a placeholder, and requires each to be caught.
 - The verifier is heuristic on hedging and negation: it proves a marker survived,
   not that the scope is identical. Scope doubts belong in the review queue.
 - Formulas are compared as glyph strings; mathematical equivalence is not checked.
+
+
+## Minimal example
+
+Input: a 2-page paper at `input/paper.pdf`.
+
+```bash
+python scripts/prepare.py input/paper.pdf --out work --max-paragraphs 6
+python scripts/verify.py --work work
+```
+
+示意输出（示例，非正式答案）:
+
+```json
+{"segments": 6, "translated": 6, "terms_kept": 0.98, "length_ratio": 0.92,
+ "untranslated": 0, "status": "success"}
+```
+
+Illustrative only: the ratios come from this example paper.
 
 See `references/` for the workflow, the glossary format, the QA rules and a
 worked example.
