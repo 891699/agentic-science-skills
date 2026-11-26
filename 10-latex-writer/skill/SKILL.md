@@ -5,6 +5,14 @@ description: "Build a LaTeX project that compiles: emit sources from a content s
 
 # LaTeX Writer
 
+## Requirements
+
+- Python 3.10 or newer; the standard library only, no pip installs needed.
+- A TeX distribution on `PATH` with `pdflatex` and `bibtex`; `texlive-latex-base`,
+  `texlive-latex-recommended` and `texlive-latex-extra` are enough, and the Docker image
+  installs exactly those. TinyTeX also works.
+
+
 A `.tex` that looks right and does not compile is worth nothing. This skill closes the
 loop: emit, compile, read the log, classify, repair, compile again — and keep the
 evidence for every round.
@@ -81,3 +89,36 @@ compile and still be wrong.
 - Fonts and CJK typesetting are out of scope unless the template already loads them.
 
 See `references/repair-playbook.md` and `references/qa-rules.md`.
+
+## When to use
+
+Use it when a LaTeX project must actually compile: the loop classifies every failure, repairs
+the mechanical ones, recompiles, and keeps what it could not fix in the report.
+
+- **Input**: a content spec (or an existing project) and a TeX engine on `PATH`.
+- **Output**: `.tex` sources, a compiled PDF, `build_report.json` and static checks.
+- **Do not use** it to "fix" an undefined reference by pointing it elsewhere; that stays a
+  report item because it is a decision, not a typo.
+
+## Minimal example
+
+Input: `data/content.json` with one section and one table.
+
+```bash
+python scripts/emit_latex.py --content content.json --out project --inject-defects
+python scripts/check_tex.py  --project project --json check.json
+python scripts/build_loop.py --project project --max-rounds 3
+```
+
+示意输出（示例，非正式答案）:
+
+```json
+{"status": "success", "rounds": 2,
+ "repairs": ["preamble: add \usepackage{booktabs}",
+             "escape specials in main.tex",
+             "table: body.tex: 2 -> 4 columns"],
+ "final": {"errors": 0, "unresolved": [], "pdf": true, "pdf_bytes": 110633}}
+```
+
+Illustrative only; the byte count belongs to the demo project.
+
